@@ -1,0 +1,63 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+G = 1.0 # Gravitational constant (1 for simplicity)
+
+# Masses
+m1 = 1.0 # Star
+m2 = 0.001 # Planet
+
+# Positions: [x, y]
+x1 = np.array([0.0, 0.0])
+x2 = np.array([1.0, 0.0])
+
+# Velocities: [vx, vy]
+v1 = np.array([0.0, 0.0])
+v2 = np.array([0.0, 1.0])
+
+# Gravitation Acceleration Funciton:
+# Input: position of star, position of planet, mass of planet
+# Retuns: Acceleration vector d/t^2 acting on pos1 from pos2
+def acceleration(pos1, pos2, m2):
+    r = pos2 - pos1
+    dist = np.linalg.norm(r)
+
+    return G * m2 * r / dist**3
+
+# Time setup
+dt = 0.01
+n_steps = 10000
+
+# Arrays to store positions
+positions1 = []
+positions2 = []
+
+for _ in range(n_steps):
+    # Records positions
+    positions1.append(x1.copy())
+    positions2.append(x2.copy())
+
+    # Compute accelerations
+    a1 = acceleration(x1, x2, m2)
+    a2 = acceleration(x2, x1, m1)
+
+    # Updage velocities
+    v1 += a1 * dt
+    v2 += a2 * dt
+
+    # Update positions
+    x1 += v1 * dt
+    x2 += v2 * dt
+
+# Plot
+positions1 = np.array(positions1)
+positions2 = np.array(positions2)
+
+plt.plot(positions1[:, 0], positions1[:, 1], label='Star')
+plt.plot(positions2[:, 0], positions2[:, 1], label='Planet')
+plt.xlabel("x")
+plt.ylabel("y")
+plt.gca().set_aspect('equal')
+plt.legend()
+plt.title("2-Body Orbit Simulation")
+plt.show()
