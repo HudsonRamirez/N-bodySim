@@ -24,6 +24,11 @@ def acceleration(pos1, pos2, m2):
 
     return G * m2 * r / dist**3
 
+
+# Precompute initial accelerations for leapfrog integration
+a1 = acceleration(x1, x2, m2)
+a2 = acceleration(x2, x1, m1)
+
 # Time setup
 dt = 0.01
 n_steps = 10000
@@ -37,17 +42,23 @@ for _ in range(n_steps):
     positions1.append(x1.copy())
     positions2.append(x2.copy())
 
-    # Compute accelerations
+    # Half-step velocity update
+    v1 += 0.5 * a1 * dt
+    v2 += 0.5 * a2 * dt
+
+    # Full step position update
+    x1 += v1 * dt
+    x2 += v2 * dt
+
+    # Compute accelerations at new position
     a1 = acceleration(x1, x2, m2)
     a2 = acceleration(x2, x1, m1)
 
-    # Updage velocities
-    v1 += a1 * dt
-    v2 += a2 * dt
+    # Complete velocity step
+    v1 += 0.5 * a1 * dt
+    v2 += 0.5 * a2 * dt
 
-    # Update positions
-    x1 += v1 * dt
-    x2 += v2 * dt
+    
 
 # Plot
 positions1 = np.array(positions1)
