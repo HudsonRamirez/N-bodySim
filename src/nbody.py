@@ -13,7 +13,7 @@ x2 = np.array([1.0, 0.0])
 
 # Velocities: [vx, vy]
 v1 = np.array([0.0, 0.0])
-v2 = np.array([0.0, 1.0])
+v2 = np.array([0.5, 1.0])
 
 # Gravitation Acceleration Funciton:
 # Input: position of star, position of planet, mass of planet
@@ -37,6 +37,11 @@ n_steps = 10000
 positions1 = []
 positions2 = []
 
+# Arrays to store energies
+KEs = []
+PEs = []
+Es = []
+
 for _ in range(n_steps):
     # Records positions
     positions1.append(x1.copy())
@@ -58,6 +63,23 @@ for _ in range(n_steps):
     v1 += 0.5 * a1 * dt
     v2 += 0.5 * a2 * dt
 
+    # Compute kinetic energies
+    KE1 = 0.5 * m1 * np.linalg.norm(v1)**2
+    KE2 = 0.5 * m2 * np.linalg.norm(v2)**2
+    KE_total = KE1 + KE2
+
+    # Compute potential energy
+    r = np.linalg.norm(x2 - x1)
+    PE = -G * m1 * m2 / r
+
+    # Total energy
+    E = KE_total + PE
+
+    # Save to lists
+    KEs.append(KE_total)
+    PEs.append(PE)
+    Es.append(E)
+
     
 
 # Plot
@@ -71,4 +93,14 @@ plt.ylabel("y")
 plt.gca().set_aspect('equal')
 plt.legend()
 plt.title("2-Body Orbit Simulation")
+plt.show()
+
+plt.plot(Es, label='Total Energy')
+plt.plot(KEs, label='Kinetic')
+plt.plot(PEs, label='Potential')
+plt.title("Energy vs Time")
+plt.xlabel("Step")
+plt.ylabel("Energy")
+plt.legend()
+plt.grid(True)
 plt.show()
