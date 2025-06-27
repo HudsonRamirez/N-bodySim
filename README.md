@@ -1,35 +1,32 @@
-# N-bodySim
+# N-Body Simulator
 
-A simple Python program simulating the two-body gravitational problem using Leapfrog integration.
-
----
-
-## Purpose
-
-This project is a starting point for building my GitHub portfolio. It helps me practice writing clean code, using Git, and documenting projects.
-
----
+A simple implementation of a gravitational N-body simulator using Leapfrog integration.
 
 ## Features
 
-- Two-body orbital simulation
-- Leapfrog integration method
-- Tracking kinetic, potential, and total energy
-- Plotting orbits and energy over time
-
----
+- Pairwise Newtonian gravity
+- Leapfrog (symplectic) integrator
+- Energy tracking (kinetic, potential, total)
+- Basic 2D plotting of trajectories and energies
 
 ## Requirements
 
-- Python 3
-- NumPy
-- Matplotlib
+- Python 3.x
+- `numpy`
+- `matplotlib`
 
----
+## Running a Simulation
 
-## Running the Program
+```python
+from nbody import Body, NBodySimulator
 
-Run the simulation with:
+# Initialize bodies
+planet = Body(0.1, [0.0, 1.0], [1.0, 0.0])
+star = Body(1.0, [0.0, 0.0], [0.0, 0.0])
+bodies = [planet, star]
 
-```bash
-python nbody.py
+# Run simulation
+sim = NBodySimulator(bodies, dt=0.1, n_steps=1000)
+sim.RunSim()
+sim.PlotTrajectories()
+sim.PlotEnergies()
