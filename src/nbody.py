@@ -1,3 +1,14 @@
+"""
+N-Body Simulator (2D)
+Hudson W. Ramirez
+
+Simulates gravitational interaction between bodies using 
+a leapfrog integration method.
+
+Includes trajectory and energy plotting.
+
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 
